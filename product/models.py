@@ -1,4 +1,5 @@
 from django.db import models
+from category.models import Category
 
 
 class Product(models.Model):
@@ -6,8 +7,9 @@ class Product(models.Model):
         ('in stock', 'в наличии'),
         ('out of stock', 'нет в наличии')
     )
+    category = models.ForeignKey(Category, related_name='categories', on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
     slug = models.SlugField(max_length=100, primary_key=True)
-    title = models.CharField(max_length=100)
     description = models.TextField(blank=True)
     price = models.DecimalField(max_digits=7, decimal_places=2)
     image = models.ImageField(upload_to='media/products', blank=True)
@@ -16,5 +18,4 @@ class Product(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.title
-#test
+        return self.name
