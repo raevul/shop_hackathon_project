@@ -17,5 +17,15 @@ class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        ordering = ('name',)
+        verbose_name = 'Product'
+        verbose_name_plural = 'Products'
+
+    def save(self):
+        self.slug = self.name.lower().replace(' ', '-') + self.created_at
+        return super().save()
+
     def __str__(self):
         return self.name
+
