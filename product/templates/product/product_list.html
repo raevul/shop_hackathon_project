@@ -3,6 +3,14 @@
 Product
 {% endblock %}
 
-{% block content %}
 
+{% block content %}
+<div class="card" style="width: 18rem;">
+  <img src="{%  %}" class="card-img-top" alt="image">
+  <div class="card-body">
+    <h5 class="card-title">{{ product.name }}</h5>
+    <p class="card-text">{{ product.description }}</p>
+    <a href="#" class="btn btn-primary">.</a>
+  </div>
+</div>
 {% endblock %}
