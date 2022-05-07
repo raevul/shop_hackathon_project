@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # apps
     'product',
-    'category',
     'account',
     'order',
     'card',
@@ -135,4 +134,4 @@ MEDIAFILES_DIRS = BASE_DIR/'media/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-PAGINATOR_NUM = 1
+PAGINATOR_NUM = 2

@@ -18,13 +18,15 @@
           <a class="nav-link active" aria-current="page" href="#">Product</a>
         </li>
       </ul>
+
       <form class="d-flex">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <input class="form-control me-2" type="search" name="search" placeholder="Search" aria-label="Search">
         <button class="btn btn-outline-success" type="submit">Search</button>
       </form>
     </div>
   </div>
 </nav>
+
 
 {% block content %}
 {% endblock %}
@@ -32,20 +34,30 @@
 <nav aria-label="...">
   <ul class="pagination">
     {% if products.has_previous %}
-      <a class="page-link" href="?page=1">First page</a>
+      <a class="page-link {% if not products.has_previous %} disabled {% endif %}" href="?page=1">First page</a>
     {% endif %}
     {% for page in products.paginator.page_range %}
-    <li class="page-item active" aria-current="page">
-      <a class="page-link" href="?page={{ page }}"> {{ page }} </a>
-    </li>
+      {% if products.number == page %}
+        <li class="page-item active" aria-current="page">
+          <a class="page-link" href="?page={{ page }}"> {{ page }}
+            <span class="sr-only"></span></a>
+        </li>
+      {% elif page > products.number|add:-2 and page < products.number|add:2 %}
+        <li class="page-item active" aria-current="page">
+          <a class="page-link" href="?page={{ page }}"> {{ page }} </a>
+        </li>
+      {% endif %}
     {% endfor %}
-     {% if product.end_index %}
-    <li class="page-item">
-      <a class="page-link" href="?page={{ page.paginator.num_pages }}">Last page</a>
+     {% if products.end_index %}
+    <li class="page-item {% if not products.has_next %} disabled {% endif %}">
+      <a class="page-link" href="?page={{ products.paginator.num_pages }}">Last page</a>
     </li>
     {% endif %}
   </ul>
 </nav>
+<div>
+  {{ products }}
+</div>
 {% endif %}
 
 </body>
