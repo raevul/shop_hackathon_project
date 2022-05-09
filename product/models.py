@@ -1,6 +1,9 @@
 from django.db import models
 from django.urls import reverse
+<<<<<<< HEAD
 from category.models import Category
+=======
+>>>>>>> 01127bee196fdcea3d0b5333cfd4579a095d009d
 
 
 class Product(models.Model):
@@ -8,7 +11,7 @@ class Product(models.Model):
         ('in stock', 'в наличии'),
         ('out of stock', 'нет в наличии')
     )
-    category = models.ForeignKey(Category, related_name='categories', on_delete=models.CASCADE)
+    category = models.ForeignKey('Category', related_name='categories', on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     slug = models.SlugField(max_length=100, unique=True)
     description = models.TextField(blank=True)
@@ -19,6 +22,7 @@ class Product(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+<<<<<<< HEAD
         ordering = ('name',)
         verbose_name = 'Product'
         verbose_name_plural = 'Products'
@@ -29,7 +33,27 @@ class Product(models.Model):
 
     def get_absolute_url(self):
         return reverse('product:product-detail-url', kwargs={'product_slug': self.slug})
+=======
+        ordering = ['-created_at']
+>>>>>>> 01127bee196fdcea3d0b5333cfd4579a095d009d
 
     def __str__(self):
         return self.name
 
+<<<<<<< HEAD
+=======
+
+class Category(models.Model):
+    name = models.CharField(max_length=50)
+    slug = models.SlugField(max_length=50)
+
+    class Meta:
+        verbose_name = 'Category'
+        verbose_name_plural = 'Categories'
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('product-list-url', args=[self.slug, ])
+>>>>>>> 01127bee196fdcea3d0b5333cfd4579a095d009d

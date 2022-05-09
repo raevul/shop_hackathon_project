@@ -4,6 +4,7 @@ Product
 {% endblock %}
 
 {% block content %}
+<<<<<<< HEAD
 <div class="container">
   <div style="display: flex;">
     <div style="width: 20%; margin-right: 5%;">
@@ -34,3 +35,28 @@ Product
 </div>
 
 {% endblock %}
+=======
+<h3>Categories</h3>
+<div id="sidebar">
+   <ul class="selected">
+            <a href="{% url 'product-list-url' %}">
+                <button type="button" class="btn btn-primary" style="margin-bottom: 10px;">All</button></a>
+      {% for category in categories %}
+            <a href="{{ category.get_absolute_url }}" class="selected">
+                <button type="button" class="btn btn-outline-primary" style="margin-bottom: 5px;">{{ category.name }}</button></a>
+      {% endfor %}
+   </ul>
+</div>
+
+{% for product in products %}
+<div class="card" style="width: 18rem;">
+    <img src="{{product.image.url}}" class="card-img-top" alt="...">
+    <div class="card-body">
+      <h3 class="card-title">{{product.name}}</h3>
+      <h4 class="card-text">{{product.price}} $</h4>
+    </div>
+  </div>
+  {% endfor %}
+
+{% endblock %}
+>>>>>>> 01127bee196fdcea3d0b5333cfd4579a095d009d

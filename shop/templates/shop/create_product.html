@@ -1,0 +1,10 @@
+{% extends 'shop/base.html' %}
+{% block title %} Create {% endblock %}
+
+{% block content %}
+<form action="{% url 'shop:create-product-url' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{form.as_p}}
+    <button type="submit">Create</button>
+</form>
+{% endblock %}

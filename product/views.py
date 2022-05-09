@@ -1,21 +1,33 @@
 from django.shortcuts import render
-from django.http import HttpResponse
-from django.views.generic import View
-from .models import Product
-from .forms import ProductForm
-from category.models import Category
+from django.core.paginator import Paginator
+from django.db.models import Q
+
+from .models import Product, Category
+from django.conf import settings
 
 
-def product_list(request):
-    products = Product.objects.all()
+def product_list(request, category_slug=None):
+    category = None
     categories = Category.objects.all()
-    return render(request, 'product/product_list.html', {'products': products, 'categories': categories})
+    products = Product.objects.all()
 
-def product_detail(request, slug):
-    product = Product.objects.get(slug=slug)
-    return render(request, 'product/product_detail.html', {'product': product})
+    if category_slug:
+        category = Category.objects.get(slug=category_slug)
+        products = products.filter(category=category)
 
-class CreateProduct(View):
-    def Get(self, request):
-        form = ProductForm()
-        return render(request, 'product:create_product.html', {'form': form})
+    search = request.GET.get('search', '')
+    if search:
+        products = products.filter(Q(name__icontains=search) |
+                                   Q(description__icontains=search))
+
+    paginator = Paginator(products, settings.PAGINATOR_NUM)
+    page_number = request.GET.get('page')
+    products = paginator.get_page(page_number)
+
+    context = {
+        'products': products,
+        'categories': categories,
+        'category': category,
+    }
+
+    return render(request, 'product/product_list.html', context)

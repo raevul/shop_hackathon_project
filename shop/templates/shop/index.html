@@ -1,0 +1,40 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+{% block title %} Index {% endblock %}
+
+{% block content %}
+    <div style="width: 200px; margin-right: 20px;">
+        <ul class="list-group list-group-flush mt-4">
+        <a href="{% url 'shop:index-url' %}" class="list-group-item" style="text-decoration: none;"><h2>All</h2></a>
+        {% for cat in categories %}
+        <a href="{{cat.get_absolute_url}}" class="list-group-item" style="text-decoration: none;"><h2>{{cat.name}}</h2></a>
+        {% endfor %}
+        </ul>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-3 g-4 mt-4">
+        {% for prod in products %}
+        <div class="col" style="overflow-x: auto;">
+            <a href="{{prod.get_absolute_url}}" style="text-decoration: none;">
+                <div class="card h-100">
+                {% if prod.image %}
+                <img src="{{prod.image.url}}" style="height: 17rem; margin-left: auto; margin-right: auto;" class="card-img-top mt-4" alt="product image">
+                {% else %}
+                <img src="{% static 'shop/img/default-image.png' %}" style="height: 17rem; margin-left: auto; margin-right: auto;" class="card-img-top mt-4" alt="product image">
+                {% endif %}
+                <div class="card-body">
+                    <h3 class="card-title">{{prod.name}}</h3>
+                    <h4 class="card-title">{{prod.price}}</h4>
+                    <h5 class="card-text" style="color: gray;">{{prod.description|truncatewords:17}}</h5>
+                </div>
+                <div class="card-footer">
+                    <small class="text-muted">{{prod.stock}}</small>
+                </div>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+
+
+{% endblock %}
