@@ -132,4 +132,4 @@ MEDIA_ROOT = BASE_DIR / 'media/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-PAGINATOR_NUM = 2
+PAGINATOR_NUM = 3
