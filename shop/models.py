@@ -48,5 +48,19 @@ class Category(models.Model):
 
 class Comment(models.Model):
     title = models.TextField()
+    slug = models.SlugField(max_length=200, unique=True)
     product = models.ForeignKey('Product', on_delete=models.CASCADE, related_name='comments')
-    
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.title
+
+    def save(self):
+        self.slug = self.title[:30:2].replace(' ', '-')
+        return super().save()
+
+    class Meta:
+        ordering = ('-created_at', )
+        verbose_name = 'Comment'
+        verbose_name_plural = 'Comments'

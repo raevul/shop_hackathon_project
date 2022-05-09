@@ -1,5 +1,6 @@
-from django.shortcuts import render, get_object_or_404
-
+from django.shortcuts import redirect, render, get_object_or_404
+from django.urls import reverse
+from .models import Comment
 from django.conf import settings
 from django.core.paginator import Paginator
 from django.db.models import Q
@@ -34,6 +35,24 @@ class GetAllMixin:
 class GetDetailMixin:
     model = None
     template = None
+    comments = Comment.objects.all()
     def get(self, request, product_slug):
-        obj = self.model.objects.get(slug=product_slug)
-        return render(request, self.template, {'product':obj})
+        product = get_object_or_404(self.model, slug=product_slug)
+        return render(request, self.template, {'product':product, 'comments':self.comments})
+
+    def post(self, request, product_slug):
+        product = get_object_or_404(self.model, slug=product_slug)
+        if request.POST.get('comment'):
+            comment = Comment(title=request.POST.get('comment'), product_id=product.id)
+            comment.save()
+            return redirect(product.get_absolute_url())
+
+
+class DeleteObjectMixin:
+    model = None
+    template_url = None
+    def get(self, request, slug):
+        obj = get_object_or_404(self.model, slug=slug)
+        obj.delete()
+        return redirect(self.template_url)
+        

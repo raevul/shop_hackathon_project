@@ -1,8 +1,8 @@
 from urllib import request
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import View
-from .models import Category, Product
-from .utils import GetAllMixin, GetDetailMixin
+from .models import Category, Product, Comment
+from .utils import DeleteObjectMixin, GetAllMixin, GetDetailMixin
 from .forms import ProductForm
 
 # Create your views here.
@@ -41,9 +41,12 @@ class UpdateProduct(View):
             return redirect(update_product.get_absolute_url())
         ...
 
-class DeleteProduct(View):
-    def get(self, request, product_slug):
-        product = Product.objects.get(slug=product_slug)
-        product.delete()
-        return redirect('shop:index-url')
+class DeleteProduct(DeleteObjectMixin, View):
+    model = Product
+
+class DeleteComment(View):
+    def get(self, request, slug):
+        comment = get_object_or_404(Comment, slug=slug)
+        comment.delete()
+        return redirect(comment.product.get_absolute_url())
 
