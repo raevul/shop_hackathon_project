@@ -1,6 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 
-
+from django.conf import settings
 from django.core.paginator import Paginator
 from django.db.models import Q
 
@@ -13,13 +13,18 @@ class GetAllMixin:
         obj_cat = self.model_cat.objects.all()
 
         if category_slug:
-            test = self.model_cat.objects.get(slug=category_slug)
-            obj_prod = test.products.all()
+            category = get_object_or_404(obj_cat, slug=category_slug)
+            obj_prod = category.products.all()
 
         search = request.GET.get('search', '')
         if search:
             obj_prod = obj_prod.filter(Q(name__icontains=search) |
                                     Q(description__icontains=search))
+
+                
+        paginator = Paginator(obj_prod, settings.PAGINATOR_NUM)
+        page_number = request.GET.get('page')
+        obj_prod = paginator.get_page(page_number)
 
         return render(request, self.template, {
             'products': obj_prod,

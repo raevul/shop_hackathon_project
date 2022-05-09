@@ -14,13 +14,13 @@
 
     <div class="row row-cols-1 row-cols-md-3 g-4 mt-4">
         {% for prod in products %}
-        <div class="col" style="overflow-x: auto;">
+        <div class="col">
             <a href="{{prod.get_absolute_url}}" style="text-decoration: none;">
                 <div class="card h-100">
                 {% if prod.image %}
-                <img src="{{prod.image.url}}" style="height: 17rem; margin-left: auto; margin-right: auto;" class="card-img-top mt-4" alt="product image">
+                <img src="{{prod.image.url}}" style="height: 300px; margin-left: auto; margin-right: auto;" class="card-img-top mt-4" alt="product image">
                 {% else %}
-                <img src="{% static 'shop/img/default-image.png' %}" style="height: 17rem; margin-left: auto; margin-right: auto;" class="card-img-top mt-4" alt="product image">
+                <img src="{% static 'shop/img/default-image.png' %}" style="height: 300px; margin-left: auto; margin-right: auto;" class="card-img-top mt-4" alt="product image">
                 {% endif %}
                 <div class="card-body">
                     <h3 class="card-title">{{prod.name}}</h3>
