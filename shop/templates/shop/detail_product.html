@@ -1,0 +1,28 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+{% block title %}{{product.name}}{% endblock %}
+{% block content %}
+
+<div class="card mb-3" style="max-width: 1000px;">
+    <div class="row g-0">
+      <div class="col-md-4">
+        {% if product.image %}
+        <img src="{{product.image.url}}" class="img-fluid rounded-start mt-4 mb-3" alt="product image">
+        {% else %}
+        <img src="{% static 'shop/img/default-image.png' %}" class="img-fluid rounded-start mt-4 mb-3" alt="product image">
+        {% endif %}
+      </div>
+      <div class="col-md-8">
+        <div class="card-body">
+          <h3 class="card-title mt-2">{{product.name}}</h3>
+          <h4 class="card-title">{{product.price}}</h4>
+          <p class="card-text" style="color: grey;">{{product.description}}</p>
+          <p class="card-text"><small class="text-muted">{{product.stock}}</small></p>
+        </div>
+      </div>
+      <a href="{% url 'shop:update-product-url' product.slug %}" class="btn btn-primary">Update</a>
+      <a href="{% url 'shop:delete-product-url' product.slug %}" class="btn btn-danger">Delete</a>
+    </div>
+  </div>
+
+{% endblock %}
