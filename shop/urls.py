@@ -7,6 +7,7 @@ urlpatterns = [
     path('<slug:category_slug>/', Index.as_view(), name='category-url'),
     path('product/<slug:product_slug>/', DetailProduct.as_view(), name='detail-product-url'),
     path('product/update/<slug:product_slug>/', UpdateProduct.as_view(), name='update-product-url'),
-    path('product/delete/<slug:slug>/', DeleteProduct.as_view(), name='delete-product-url'),
-    path('comment/delete/<slug:slug>/', DeleteComment.as_view(), name='delete-comment-url'),
+    path('product/delete/<slug:product_slug>/', DeleteProduct.as_view(), name='delete-product-url'),
+    path('comment/delete/<slug:comment_slug>/', DeleteComment.as_view(), name='delete-comment-url'),
+    path('comment/update/<slug:comment_slug>/', UpdateComment.as_view(), name='update-comment-url'),
 ]

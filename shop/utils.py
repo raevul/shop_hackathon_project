@@ -51,8 +51,8 @@ class GetDetailMixin:
 class DeleteObjectMixin:
     model = None
     template_url = None
-    def get(self, request, slug):
-        obj = get_object_or_404(self.model, slug=slug)
+    def get(self, request, product_slug):
+        obj = get_object_or_404(self.model, slug=product_slug)
         obj.delete()
         return redirect(self.template_url)
         
