@@ -133,3 +133,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 PAGINATOR_NUM = 3
+
+CART_SESSION_ID = 'cart'
