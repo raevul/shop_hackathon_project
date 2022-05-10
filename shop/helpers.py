@@ -22,6 +22,35 @@ class Cart:
                 self.cart[product_slug]['quantity'] += int(quantity)
             self.save()
 
+    def save(self):
+        self.session.modified = True
 
+    def remove(self, product):
+        product_slug = product.slug
+        if product_slug in self.cart:
+            del self.cart[product_slug]
+            self.save()
 
+    def __iter__(self):
+        product_slug_copy = self.cart.keys()
+        products = Product.objects.filter(slug__in=product_slug_copy)
 
+        cart = self.cart.copy()
+        for product in products:
+            cart[product.slug]['product'] = product
+
+        for item in self.cart.values():
+            item['price'] = Decimal(item('price'))
+            item['total_price'] = item['price'] * item['quantity']
+            yield item
+
+    def __len__(self):
+        return sum(item['quantity'] for item in self.cart.values())
+
+    def get_total_price(self):
+        return sum(Decimal(item['price']) * item['quantity'] for item in self.cart.values())
+
+    def clear(self):
+        del self.session[settings.CART_SESSION_ID]
+        self.save()
+        
