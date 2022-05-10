@@ -1,4 +1,4 @@
-{% extends 'shop/base.html' %}
+{% extends 'shop/shop.html' %}
 
 {% block title %}
   Profile
@@ -18,7 +18,7 @@
         <h5 class="card-title">{{ user.username }}</h5>
         <p class="card-text">{{ user.email }}</p>
         <a href="{% url 'shop:logout-url' %}">
-          <button type="button" class="btn btn-outline-danger">Logout</button>
+          <button type="button" class="button add_to_cart_button product_type_simple">Logout</button>
         </a>
       </div>
     </div>

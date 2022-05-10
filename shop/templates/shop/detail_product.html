@@ -1,56 +1,108 @@
-{% extends 'shop/base.html' %}
+{% extends 'shop/shop.html' %}
 {% load static %}
 {% block title %}{{product.name}}{% endblock %}
 {% block content %}
-<div class="mb-5" style="margin-left: auto; margin-right: auto;">
-<div class="card mb-3 mt-4" style="max-width: 1000px;">
-    <div class="row g-0">
-      <div class="col-md-4">
-        {% if product.image %}
-        <img src="{{product.image.url}}" class="img-fluid rounded-start mt-4 mb-3" alt="product image">
-        {% else %}
-        <img src="{% static 'shop/img/default-image.png' %}" class="img-fluid rounded-start mt-4 mb-3" alt="product image">
-        {% endif %}
+
+<article class="post_content">
+  <nav class="woocommerce-breadcrumb">
+    <a href="{% url 'shop:index-url' %}">Shop</a>&nbsp;&#47;&nbsp;
+    <span>{{product.name}}</span>
+  </nav>
+  <div class="product">
+    <div class="images">
+      <a href="{{product.image.url}}" class="woocommerce-main-image zoom" title="">
+        <img src="{{product.image.url}}" class="attachment-shop_single" alt="apetito1" title="apetito1" />
+      </a>
+    </div>
+
+    <div class="summary entry-summary">
+      <h1 class="product_title entry-title">{{product.name}}</h1>
+      <div>
+        <p class="price">
+          <ins>
+          <span class="amount">{{product.price}} сом</span>
+          </ins>
+        </p>
       </div>
-      <div class="col-md-8">
-        <div class="card-body">
-          <h3 class="card-title mt-2">{{product.name}}</h3>
-          <h4 class="card-title">{{product.price}}</h4>
-          <p class="card-text" style="color: grey;">{{product.description}}</p>
-          <p class="card-text"><small class="text-muted">{{product.stock}}</small></p>
+      <form class="cart" method="post" enctype='multipart/form-data'>
+        <div class="quantity">
+          <input type="number" step="1" min="1"  name="quantity" value="1" title="Qty" class="input-text qty text" size="4" />
+        </div>
+        <input type="hidden" name="add-to-cart" value="4015" />
+        <button type="submit" class="single_add_to_cart_button button alt">Add to cart</button>
+      </form>
+      <div class="product_meta">
+        <span class="posted_in">
+          Categories: 
+          <a href="{{product.category.get_absolute_url}}" rel="tag">{{product.category}}</a>, 
+        </span>
+        <span class="product_id">Product ID:
+          <span>{{product.id}}</span>
+        </span>
+      </div>
+    </div>
+
+
+    <div class="woocommerce-tabs wc-tabs-wrapper sc_tabs">
+      <ul class="tabs wc-tabs sc_tabs_titles">
+        <li class="tab_names description_tab">
+          <a href="#tab-description">Description</a>
+        </li>
+        <li class="tab_names reviews_tab">
+          <a href="#tab-reviews">Reviews ({{product.comments.all|length}})</a>
+        </li>
+      </ul>
+      <div class="panel entry-content wc-tab" id="tab-description">
+        <h2>Product Description</h2>
+        <p>{{product.description}}</p>
+        <hr>
+      </div>
+      <div class="panel entry-content wc-tab" id="tab-reviews">
+        <div id="reviews">
+          <div id="comments">
+            <h2>Reviews</h2>
+            {% if product.comments %}
+            {% for comment in product.comments.all %}
+            <div class="card" style="margin-bottom: 40px;">
+              <h5 class="card-header">User</h5>
+              <div class="card-body">
+                <p class="card-text">{{comment.title}}</p>
+                  <a href="{% url 'shop:update-comment-url' comment.slug %}" class="btn btn-primary">Edit</a>
+                  <a href="{% url 'shop:delete-comment-url' comment.slug %}" class="btn btn-primary">Delete</a>
+              </div>
+              <h6 class="card-header" style="color: grey;">{{comment.created_at}}</h6>
+          
+            </div>
+            {% endfor %}
+            {% else %}
+              <p>There are no reviews yet.</p>
+            {% endif %}
+
+
+          </div>
+          <div id="review_form_wrapper">
+            <div id="review_form">
+              <div id="respond" class="comment-respond">
+                <form action="{{product.get_absolute_url}}" method="post" id="commentform" class="comment-form">
+                    {% csrf_token %}
+                    <label for="comment">Your Review</label>
+                    <textarea id="comment" name="comment" cols="45" rows="8" aria-required="true"></textarea>
+                  </p>
+                  <p class="form-submit">
+                    <input name="submit" type="submit" id="submit" class="submit" value="Submit" />
+                  </p>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="clear"></div>
         </div>
       </div>
-      {% if request.user.is_authenticated %}
-        <a href="{% url 'shop:update-product-url' product.slug %}" class="btn btn-primary">Update</a>
-        <a href="{% url 'shop:delete-product-url' product.slug %}" class="btn btn-danger">Delete</a>
-      {% endif %}
     </div>
+
   </div>
 
-  <h2 class="mt-4">Comments</h2>
-  <form action="{{product.get_absolute_url}}" method="post">
-    {% csrf_token %}
-    <div class="form-floating">
-      <textarea class="form-control" placeholder="Leave a comment here" name="comment" id="floatingTextarea2" style="height: 100px"></textarea>
-      <label for="floatingTextarea2">Comments</label>
-      <button class="btn btn-primary mt-2" style="float: right;">Add</button>
-    </div>
-  </form>
+</article>
 
-  {% for comment in product.comments.all %}
-  {% if comment %}
-  <div class="card" style="margin-top: 60px;">
-    <h5 class="card-header">User</h5>
-    <div class="card-body">
-      <p class="card-text">{{comment.title}}</p>
-        <a href="{% url 'shop:update-comment-url' comment.slug %}" class="btn btn-primary">Edit</a>
-        <a href="{% url 'shop:delete-comment-url' comment.slug %}" class="btn btn-primary">Delete</a>
-    </div>
-    <h6 class="card-header" style="color: grey;">{{comment.created_at}}</h6>
 
-  </div>
-  {% endif %}
-{% endfor %}
-
-</div>
 {% endblock %}

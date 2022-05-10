@@ -1,10 +1,10 @@
-{% extends 'shop/base.html' %}
+{% extends 'shop/shop.html' %}
 {% block title %} Create {% endblock %}
 
 {% block content %}
 <form action="{% url 'shop:create-product-url' %}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{form.as_p}}
-    <button type="submit">Create</button>
+    <button type="submit" class="button add_to_cart_button product_type_simple">Create</button>
 </form>
 {% endblock %}

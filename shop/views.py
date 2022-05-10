@@ -69,7 +69,7 @@ class UpdateComment(View):
         comment = get_object_or_404(Comment, slug=comment_slug)
         comment_form = CommentForm(request.POST, instance=comment)
         if comment_form.is_valid():
-            update_comment = comment_form.save()
+            comment_form.save()
             return redirect(comment.product.get_absolute_url())
 
 class Register(CreateView):
@@ -83,7 +83,7 @@ class Register(CreateView):
         return context
 
     def get_success_url(self):
-        return reverse_lazy('shop:profile-url')
+        return reverse_lazy('shop:index-url')
 
 
 class Login(LoginView):

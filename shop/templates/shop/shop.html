@@ -1,0 +1,186 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta name="format-detection" content="telephone=no">
+	<title>{% block title %}Shop{% endblock %}</title>
+	<link rel="icon" type="image/x-icon" href="{% static 'shop/img/favicon.ico' %}" />
+	<link rel='stylesheet' href="{% static 'shop/js/vendor/swiper/idangerous.swiper.css' %}" type='text/css' media='all' />
+	<link rel='stylesheet' href="{% static 'shop/js/vendor/swiper/idangerous.swiper.scrollbar.css' %}" type='text/css' media='all' />
+	<link rel='stylesheet' href="{% static 'shop/js/vendor/magnific-popup/magnific-popup.css' %}" type='text/css' media='all' />
+	<link rel='stylesheet' href="{% static 'shop/js/vendor/woocommerce/css/select2.css' type='text/css' %}" media='all' />
+	<link rel='stylesheet' href="{% static 'shop/js/vendor/woocommerce/css/woocommerce-layout.css' %}" type='text/css' media='all' />
+	<link rel='stylesheet' href="{% static 'shop/js/vendor/woocommerce/css/woocommerce-smallscreen.css' %}" type='text/css' media='only screen and (max-width: 768px)' />
+	<link rel='stylesheet' href="{% static 'shop/js/vendor/woocommerce/css/woocommerce.css' %}" type='text/css' media='all' />
+	<link rel='stylesheet' href="{% static 'shop/css/fontello/css/fontello.css' %}" type='text/css' media='all' />
+	<link rel='stylesheet' href="{% static 'shop/css/fontello/css/animation.css' %}" type='text/css' media='all' />
+	<link rel='stylesheet' href="{% static 'shop/css/style.css' type='text/css' %}" media='all' />
+	<link rel='stylesheet' href="{% static 'shop/css/shortcodes.css' %}" type='text/css' media='all' />
+	<link rel='stylesheet' href="{% static 'shop/css/responsive.css' %}" type='text/css' media='all' />
+	<link rel='stylesheet' href="{% static 'shop/css/woo-style.css' %}" type='text/css' media='all' />
+
+</head>
+
+<body class="woocommerce woocommerce-page">
+
+	<div id="wrap" class="wrap sideBarRight sideBarShow menuStyle1 menuSmartScrollShow blogStyleExcerpt bodyStyleWide menuStyleFixed visibleMenuDisplay logoImageStyle logoStyleBG">
+		<div id="wrapBox" class="wrapBox">
+
+			<header id="header">
+				<div class="menuFixedWrap">
+					<div class="usermenuArea">
+						<ul class="usermenuList">
+							<li>
+								<a href="{% url 'shop:index-url' %}">Shop</a>
+							</li>
+							{% if request.user.is_authenticated %}
+							<li class="">
+								<a href="{% url 'shop:create-product-url' %}" >Create</a>
+							</li>
+							<li>
+								<a href="{% url 'shop:profile-url' %}" class="">{{ user.username }}</a>
+							</li>
+							<li class="usermenuCart">
+								<a href="#" class="cart_button">
+									<img src="{% static 'shop/img/icon-cart.png' %}" alt="">
+								</a>
+								<ul class="widget_area sidebar_cart sidebar">
+									<li>
+										<div class="widget woocommerce widget_shopping_cart">
+											<div class="hide_cart_widget_if_empty">
+												<div class="widget_shopping_cart_content">
+													<ul class="cart_list product_list_widget">
+														<li class="empty">No products in the cart.</li>
+													</ul>
+												</div>
+											</div>
+										</div>
+									</li>
+								</ul>
+							</li>
+							{% else %}
+							<li class="">
+								<a href="{% url 'shop:register-url' %}" >Sing Up</a>
+							</li>
+							<li class="">
+								<a href="{% url 'shop:login-url' %}" >Login</a>
+							</li>
+							{% endif %}
+						</ul>
+					</div>
+				</div>
+			</header>
+
+			<div class="wrapContent">
+				<div id="wrapWide" class="wrapWide">
+					<div class="content">
+						<section class="">
+							<div class="container">
+								<section class="post shop_mode_thumbs">
+									<article class="post_content">
+
+										<form class="d-flex">
+											<input class="form-control me-2" type="search" name="search" placeholder="Search" aria-label="Search">
+											<button class="button add_to_cart_button product_type_simple" style="margin-top: 10px;" type="submit">Search</button>
+										</form>
+										<hr>
+										{% if products %}
+										<p class="woocommerce-result-count">
+											Showing 1&ndash;10 of 14 results</p>
+										<form class="woocommerce-ordering" method="get">
+											<select name="orderby" class="orderby">
+												<option value="menu_order"  selected='selected'>Default sorting</option>
+												<option value="popularity" >Sort by popularity</option>
+												<option value="rating" >Sort by average rating</option>
+												<option value="date" >Sort by newness</option>
+												<option value="price" >Sort by price: low to high</option>
+												<option value="price-desc" >Sort by price: high to low</option>
+											</select>
+											<input type="hidden" name="post_type" value="product" />
+										</form>
+										{% endif %}
+										{% block content %}
+
+										{% endblock %}
+										{% if products %}
+										<nav class="woocommerce-pagination">
+											<ul class='page-numbers'>
+												{% if products.has_previous %}
+												<li>
+													<a class="prev page-numbers {% if not products.has_previous %} disabled {% endif %}" href="?page=1">&lt;</a>
+												</li>
+												{% endif %}
+												{% for page in products.paginator.page_range %}
+												{% if products.number == page %}
+												<li>
+													<a class='page-numbers current' href="?page={{ page }}">{{ page }}</a>
+												</li>
+												{% elif page > products.number|add:-2 and page < products.number|add:2 %}
+
+												<li>
+													<a class='page-numbers' href='?page={{ page }}'>{{ page }}</a>
+												</li>
+
+												{% endif %}
+												{% endfor %}
+												{% if products.end_index %}
+												<li>
+													<a class="next page-numbers" href="?page={{ products.paginator.num_pages }}">&gt;</a>
+												</li>
+												{% endif %}
+
+											</ul>
+										</nav>
+										{% endif %}
+
+									</article>
+								</section>
+							</div>
+						</section>
+					</div>
+					<div id="sidebar_main" class="widget_area sideBar">
+						<aside class="widget-first widgetWrap widget_categories">
+							<h4 class="title">Categories</h4>
+							{% if categories %}
+
+							<ul>
+								<li class="">
+									<a href="{% url 'shop:index-url' %}" title="2011 - 2016">All</a>
+								</li>
+								{% for cat in categories %}
+								<li class="">
+									<a href="{{cat.get_absolute_url}}" title="2011 - 2016">{{cat.name}}</a>
+								</li>
+								{% endfor %}
+							</ul>
+							{% else %}
+							<p>No categories</p>
+							{% endif %}
+		
+						</aside>
+					</div>
+				</div>
+			</div>
+
+			<footer class="footerWidget">
+				<div class="copyright">
+					<a href='http://themerex.net'>ThemeREX</a>
+					&copy; shop
+				</div>
+			</footer>
+		</div>
+	</div>
+
+
+	<script type='text/javascript' src="{% static 'shop/js/vendor/jquery-1.11.3.min.js' %}"></script>
+	<script type='text/javascript' src="{% static 'shop/js/vendor/jquery-migrate.min.js' %}"></script>
+	<script type='text/javascript' src="{% static 'shop/js/vendor/__packed.js' %}"></script>
+	<script type='text/javascript' src="{% static 'shop/js/custom/_utils.js' %}"></script>
+	<script type='text/javascript' src="{% static 'shop/js/custom/_front.min.js' %}"></script>
+	<script type='text/javascript' src="{% static 'shop/js/custom/shortcodes_init.min.js' %}"></script>
+	<script type='text/javascript' src="{% static 'shop/js/custom/__main.js' %}"></script>
+
+</body>
+</html>

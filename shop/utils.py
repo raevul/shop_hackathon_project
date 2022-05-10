@@ -1,6 +1,6 @@
 from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse
-from .models import Comment
+from .models import Category, Comment
 from django.conf import settings
 from django.core.paginator import Paginator
 from django.db.models import Q
@@ -42,7 +42,8 @@ class GetDetailMixin:
 
     def get(self, request, product_slug):
         product = get_object_or_404(self.model, slug=product_slug)
-        return render(request, self.template, {'product':product})
+        categories = Category.objects.all()
+        return render(request, self.template, {'product':product, 'categories': categories})
 
     def post(self, request, product_slug):
         product = get_object_or_404(self.model, slug=product_slug)
