@@ -25,6 +25,10 @@ class Product(models.Model):
     def get_absolute_url(self):
         return reverse('shop:detail-product-url', kwargs={'product_slug': self.slug})
 
+    def save(self):
+        self.slug = self.name.lower().replace(' ', '-')
+        return super().save()
+
 
 class Category(models.Model):
     name = models.CharField(max_length=70, db_index=True)

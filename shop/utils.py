@@ -4,6 +4,8 @@ from django.conf import settings
 from django.core.paginator import Paginator
 from django.db.models import Q
 
+from .models import Product
+
 
 class GetAllMixin:
     model_prod = None
@@ -20,9 +22,9 @@ class GetAllMixin:
 
         search = request.GET.get('search', '')
         if search:
-            obj_prod = obj_prod.filter(Q(name__icontains=search) |
-                                       Q(description__icontains=search))
-                
+            obj_prod = Product.objects.filter(Q(name__icontains=search) |
+                                              Q(description__icontains=search))
+
         paginator = Paginator(obj_prod, settings.PAGINATOR_NUM)
         page_number = request.GET.get('page')
         obj_prod = paginator.get_page(page_number)

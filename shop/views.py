@@ -1,9 +1,10 @@
-from urllib import request
+from django.contrib.auth.views import LoginView
 from django.shortcuts import redirect, render
-from django.views.generic import View
+from django.urls import reverse_lazy
+from django.views.generic import View, CreateView
 from .models import Category, Product
 from .utils import GetAllMixin, GetDetailMixin
-from .forms import ProductForm
+from .forms import ProductForm, RegistrationForm, LoginForm
 
 
 class Index(GetAllMixin, View):
@@ -42,7 +43,7 @@ class UpdateProduct(View):
         if product_form.is_valid():
             update_product = product_form.save()
             return redirect(update_product.get_absolute_url())
-        return render(request, 'shop/update_product.html', {'form':product_form, 'product': product})
+        return render(request, 'shop/update_product.html', {'form': product_form, 'product': product})
 
 
 class DeleteProduct(View):
@@ -51,3 +52,30 @@ class DeleteProduct(View):
         product.delete()
         return redirect('shop:index-url')
 
+
+class Register(CreateView):
+    form_class = RegistrationForm
+    template_name = 'shop/register.html'
+    success_url = reverse_lazy('shop:index-url')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['registration_form'] = self.get_form(self.get_form_class())
+        return context
+
+
+class Login(LoginView):
+    form_class = LoginForm
+    template_name = 'shop/login.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['login_form'] = self.get_form(self.get_form_class())
+        return context
+
+    def get_success_url(self):
+        return reverse_lazy('shop:index-url')
+
+
+def profile(request):
+    return render(request, 'shop/profile.html')
