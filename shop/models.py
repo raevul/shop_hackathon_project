@@ -1,4 +1,3 @@
-from tabnanny import verbose
 from django.db import models
 from django.urls import reverse
 
@@ -57,7 +56,7 @@ class Comment(models.Model):
         return self.title
 
     def save(self):
-        self.slug = self.title[:30:2].replace(' ', '-')
+        self.slug = self.product.slug + str(self.id)
         return super().save()
 
     class Meta:
