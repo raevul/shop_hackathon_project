@@ -3,6 +3,9 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.forms import ModelForm
 from .models import Product, Comment
+
+
+
 class ProductForm(ModelForm):
     class Meta:
         model = Product
@@ -29,13 +32,3 @@ class LoginForm(AuthenticationForm):
     username = forms.CharField(label='Username', widget=forms.TextInput(attrs={'class': 'form-input'}))
     password = forms.CharField(label='Password', widget=forms.PasswordInput(attrs={'class': 'form-input'}))
 
-
-PRODUCT_QUANTITY_CHOICES = [(i, str(i)) for i in range(1, 11)]
-
-
-class CartAddProductForm(forms.Form):
-    quantity = forms.TypedChoiceField(choices=PRODUCT_QUANTITY_CHOICES,
-                                      coerce=int)
-    update = forms.BooleanField(required=False,
-                                initial=False,
-                                widget=forms.HiddenInput)

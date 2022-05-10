@@ -65,7 +65,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'cart.context_processors',
             ],
         },
     },
@@ -135,4 +134,3 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 PAGINATOR_NUM = 3
 
-CART_SESSION_ID = 'cart'

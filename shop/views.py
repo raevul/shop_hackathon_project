@@ -1,14 +1,13 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from .models import Category, Product, Comment
 from .utils import DeleteObjectMixin, GetAllMixin, GetDetailMixin
-from .forms import CommentForm, ProductForm, RegistrationForm, LoginForm, CartAddProductForm
+from .forms import CommentForm, ProductForm, RegistrationForm, LoginForm
 from django.contrib.auth.views import LoginView
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import View, CreateView
 from django.contrib.auth import logout
-from django.views.decorators.http import require_http_methods
-from .helpers import Cart
+
 
 
 class Index(GetAllMixin, View):
@@ -107,32 +106,3 @@ def logout_user(request):
 def profile(request):
     return render(request, 'shop/profile.html')
 
-
-@require_http_methods(['POST'])
-def cart_add(request, product_slug):
-    cart = Cart(request)
-    product = get_object_or_404(Product, slug=product_slug)
-    form = CartAddProductForm(request.POST)
-    if form.is_valid():
-        clean_data = form.cleaned_data
-        cart.add_or_update(
-            product=product,
-            quantity=clean_data['quantity'],
-            update_quantity=clean_data['update']
-        )
-    return redirect('shop:cart-detail-url')
-
-
-def cart_remove(request, product_slug):
-    cart = Cart(request)
-    product = get_object_or_404(Product, slug=product_slug)
-    cart.remove(product)
-    return redirect('shop:cart-detail-url')
-
-
-def cart_detail(request):
-    cart = Cart(request)
-    for item in cart:
-        item['update_quantity_form'] = CartAddProductForm(initial={'quantity': item['quantity'],
-                                                                   'update': True})
-    return render(request, 'shop/cart_detail.html', {'cart': cart})
