@@ -35,10 +35,9 @@ class GetAllMixin:
 class GetDetailMixin:
     model = None
     template = None
-    comments = Comment.objects.all()
     def get(self, request, product_slug):
         product = get_object_or_404(self.model, slug=product_slug)
-        return render(request, self.template, {'product':product, 'comments':self.comments})
+        return render(request, self.template, {'product':product})
 
     def post(self, request, product_slug):
         product = get_object_or_404(self.model, slug=product_slug)

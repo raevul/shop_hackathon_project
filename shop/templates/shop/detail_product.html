@@ -35,7 +35,7 @@
     </div>
   </form>
 
-  {% for comment in comments %}
+  {% for comment in product.comments.all %}
   {% if comment %}
   <div class="card" style="margin-top: 60px;">
     <h5 class="card-header">User</h5>
