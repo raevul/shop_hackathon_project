@@ -2,6 +2,8 @@ from django.contrib.auth.views import LoginView
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import View, CreateView
+from django.contrib.auth import logout
+
 from .models import Category, Product
 from .utils import GetAllMixin, GetDetailMixin
 from .forms import ProductForm, RegistrationForm, LoginForm
@@ -63,6 +65,9 @@ class Register(CreateView):
         context['registration_form'] = self.get_form(self.get_form_class())
         return context
 
+    def get_success_url(self):
+        return reverse_lazy('shop:profile-url')
+
 
 class Login(LoginView):
     form_class = LoginForm
@@ -75,6 +80,11 @@ class Login(LoginView):
 
     def get_success_url(self):
         return reverse_lazy('shop:index-url')
+
+
+def logout_user(request):
+    logout(request)
+    return redirect('shop:index-url')
 
 
 def profile(request):
