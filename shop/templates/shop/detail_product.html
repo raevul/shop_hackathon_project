@@ -1,6 +1,18 @@
 {% extends 'shop/shop.html' %}
 {% load static %}
 {% block title %}{{product.name}}{% endblock %}
+
+{% block search %}
+    <form class="d-flex">
+        <input class="form-control me-2" type="search" name="search" placeholder="Search" aria-label="Search">
+        <button class="button add_to_cart_button product_type_simple" style="margin-top: 10px;" type="submit">Search</button>
+        <a style="float:right; margin-top: 10px;" href="{% url 'shop:index-url' %}?-price=sort" class="button add_to_cart_button product_type_simple">Expensive</a>
+        <a style="float:right; margin-right: 15px; margin-top: 10px;	" href="{% url 'shop:index-url' %}?price=sort" class="button add_to_cart_button product_type_simple">Low</a>
+    </form>
+    <hr>
+{% endblock %}
+
+
 {% block content %}
 
 <article class="post_content">
@@ -108,5 +120,27 @@
 
 </article>
 
+
+{% endblock %}
+{% block category %}
+    <div id="sidebar_main" class="widget_area sideBar">
+        <aside class="widget-first widgetWrap widget_categories">
+            <h4 class="title">Categories</h4>
+            {% if categories %}
+
+            <ul>
+                <li class="">
+                    <a href="{% url 'shop:index-url' %}" title="2011 - 2016">All</a>
+                </li>
+                {% for cat in categories %}
+                <li class="">
+                    <a href="{{cat.get_absolute_url}}" title="2011 - 2016">{{cat.name}}</a>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p>No categories</p>
+            {% endif %}
+        </aside>
 
 {% endblock %}

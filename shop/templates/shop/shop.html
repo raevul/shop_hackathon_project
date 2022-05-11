@@ -63,13 +63,8 @@
 								<section class="post shop_mode_thumbs">
 									<article class="post_content">
 
-										<form class="d-flex">
-											<input class="form-control me-2" type="search" name="search" placeholder="Search" aria-label="Search">
-											<button class="button add_to_cart_button product_type_simple" style="margin-top: 10px;" type="submit">Search</button>
-											<a style="float:right; margin-top: 10px;" href="{% url 'shop:index-url' %}?-price=sort" class="button add_to_cart_button product_type_simple">Expensive</a>
-											<a style="float:right; margin-right: 15px; margin-top: 10px;	" href="{% url 'shop:index-url' %}?price=sort" class="button add_to_cart_button product_type_simple">Low</a>
-										</form>
-										<hr>
+										{% block search %}
+										{% endblock %}
 										{% block content %}
 
 										{% endblock %}
@@ -109,27 +104,9 @@
 							</div>
 						</section>
 					</div>
-					<div id="sidebar_main" class="widget_area sideBar">
-						<aside class="widget-first widgetWrap widget_categories">
-							<h4 class="title">Categories</h4>
-							{% if categories %}
 
-							<ul>
-								<li class="">
-									<a href="{% url 'shop:index-url' %}" title="2011 - 2016">All</a>
-								</li>
-								{% for cat in categories %}
-								<li class="">
-									<a href="{{cat.get_absolute_url}}" title="2011 - 2016">{{cat.name}}</a>
-								</li>
-								{% endfor %}
-							</ul>
-							{% else %}
-							<p>No categories</p>
-							{% endif %}
-		
-						</aside>
-					</div>
+					{% block category %}
+					{% endblock %}
 				</div>
 			</div>
 
