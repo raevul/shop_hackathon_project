@@ -1,3 +1,4 @@
+from django.contrib.auth import login
 from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse, reverse_lazy
 from .models import Category, Comment
@@ -60,11 +61,17 @@ class DeleteObjectMixin:
             return redirect(self.template_url)
         return redirect(obj.product.get_absolute_url())
 
+
 class RegisterOrLoginMixin:
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['registration_form'] = self.get_form(self.get_form_class())
         return context
+
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        return redirect('shop:index-url')
 
     def get_success_url(self):
         return reverse_lazy('shop:index-url')
