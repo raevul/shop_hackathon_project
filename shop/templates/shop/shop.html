@@ -42,6 +42,12 @@
 							<li>
 								<a href="{% url 'shop:profile-url' %}" class="">{{ user.username }}</a>
 							</li>
+							<li class="usermenuCart">
+								<input type="hidden" name="add-to-cart" value="4015" />
+                                <a href="{% url 'cart:cart-detail' %}" class="cart_button">
+                                    <img src="{% static 'shop/img/icon-cart.png' %}" alt="">
+                                </a>
+                            </li>
 							{% else %}
 							<li class="">
 								<a href="{% url 'shop:register-url' %}" >Sing Up</a>
@@ -50,12 +56,6 @@
 								<a href="{% url 'shop:login-url' %}" >Login</a>
 							</li>
 							{% endif %}
-							<li class="usermenuCart">
-								<input type="hidden" name="add-to-cart" value="4015" />
-                                <a href="{% url 'cart:cart-detail' %}" class="cart_button">
-                                    <img src="{% static 'shop/img/icon-cart.png' %}" alt="">
-                                </a>
-                            </li>
 						</ul>
 					</div>
 				</div>
