@@ -1,27 +1,18 @@
 {% extends 'shop/shop.html' %}
-
+{% load static %}
 {% block title %}
   Profile
 {% endblock %}
 
 {% block content %}
-  <div class="card mb-3" style="width: 600px; height: 300px; margin-left: auto; margin-right: auto; margin-top: 100px;">
-    <a href="{% url 'shop:index-url' %}" style="margin-left: auto;">
-    <button type="button" class="btn-close" aria-label="Close"></button>
-    </a>
+  <div class="card mb-3" style="height: 300px; margin-left: auto; margin-right: auto; margin-top: 50px;">
   <div class="row g-0">
-    <div class="col-md-4">
-      <img src="..." class="img-fluid rounded-start" alt="...">
-    </div>
-    <div class="col-md-8">
+      <img src="{% static 'shop/img/default_user.png' %}" style="height: 200px" class="img-fluid rounded-start" alt="...">
       <div class="card-body">
         <h5 class="card-title">{{ user.username }}</h5>
         <p class="card-text">{{ user.email }}</p>
-        <a href="{% url 'shop:logout-url' %}">
-          <button type="button" class="button add_to_cart_button product_type_simple">Logout</button>
-        </a>
+        <a href="{% url 'shop:logout-url' %}" class="button add_to_cart_button product_type_simple">Logout</a>
       </div>
-    </div>
   </div>
 </div>
 {% endblock %}

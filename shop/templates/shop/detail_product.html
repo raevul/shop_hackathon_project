@@ -24,7 +24,11 @@
           </ins>
         </p>
       </div>
-      <form class="cart" method="post" enctype='multipart/form-data'>
+      <a href="{% url 'shop:update-product-url' product.slug %}" class="single_add_to_cart_button button alt">Update</a>
+      <a href="{% url 'shop:delete-product-url' product.id %}" class="single_add_to_cart_button button alt">Delete</a>
+
+      <form action="{% url 'cart:cart-add' product.slug %}" class="cart" method="post" enctype='multipart/form-data'>
+        {% csrf_token %}
         <div class="quantity">
           <input type="number" step="1" min="1"  name="quantity" value="1" title="Qty" class="input-text qty text" size="4" />
         </div>
@@ -67,8 +71,8 @@
               <h5 class="card-header">User</h5>
               <div class="card-body">
                 <p class="card-text">{{comment.title}}</p>
-                  <a href="{% url 'shop:update-comment-url' comment.slug %}" class="btn btn-primary">Edit</a>
-                  <a href="{% url 'shop:delete-comment-url' comment.slug %}" class="btn btn-primary">Delete</a>
+                  <a href="{% url 'shop:update-comment-url' comment.id %}" class="btn btn-primary">Edit</a>
+                  <a href="{% url 'shop:delete-comment-url' comment.id %}" class="btn btn-primary">Delete</a>
               </div>
               <h6 class="card-header" style="color: grey;">{{comment.created_at}}</h6>
           

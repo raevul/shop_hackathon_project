@@ -1,0 +1,45 @@
+{% extends 'shop/shop.html' %}
+{% block title %} Cart {% endblock %}
+
+{% block content %}
+    <h1>Your cart</h1>
+        <table class="cart">
+            <thead>
+                <tr style="background-color: YellowGreen;">
+                    <th>Image</th>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Remove</th>
+                    <th>Unit price</th>
+                    <th>Total price</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for item in cart %}
+                {% with product=item.product %}
+                    <tr>
+                        <td>
+                            <a href="{{ product.get_absolute_url }}">
+                                <img style="height: 70px; margin-top: 20px; margin-bottom: 20px;" src="{{ product.image.url }}">
+                            </a>
+                        </td>
+                        <td>{{ product.name }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td><a href="{% url 'cart:cart-remove' product.slug %}">Remove</a></td>
+                        <td class="num">{{ item.price }} сом</td>
+                        <td class="num">{{ item.total_price }} сом</td>
+                    </tr>
+                {% endwith %}
+            {% endfor %}
+            <tr style="margin-top:20px; background-color: YellowGreen;">
+                <td>Total</td>
+                <td colspan="4"></td>
+                <td class="num">{{ cart.get_total_price }} сом</td>
+            </tr>
+            </tbody>
+        </table>
+        <p class="text-right">
+            <a href="{% url 'shop:index-url' %}" class="single_add_to_cart_button button alt">Continue</a>
+            <a href="{% url 'shop:index-url' %}" class="single_add_to_cart_button button alt">Checkout</a>
+        </p>
+{% endblock %}

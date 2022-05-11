@@ -42,24 +42,6 @@
 							<li>
 								<a href="{% url 'shop:profile-url' %}" class="">{{ user.username }}</a>
 							</li>
-							<li class="usermenuCart">
-								<a href="#" class="cart_button">
-									<img src="{% static 'shop/img/icon-cart.png' %}" alt="">
-								</a>
-								<ul class="widget_area sidebar_cart sidebar">
-									<li>
-										<div class="widget woocommerce widget_shopping_cart">
-											<div class="hide_cart_widget_if_empty">
-												<div class="widget_shopping_cart_content">
-													<ul class="cart_list product_list_widget">
-														<li class="empty">No products in the cart.</li>
-													</ul>
-												</div>
-											</div>
-										</div>
-									</li>
-								</ul>
-							</li>
 							{% else %}
 							<li class="">
 								<a href="{% url 'shop:register-url' %}" >Sing Up</a>
@@ -84,23 +66,10 @@
 										<form class="d-flex">
 											<input class="form-control me-2" type="search" name="search" placeholder="Search" aria-label="Search">
 											<button class="button add_to_cart_button product_type_simple" style="margin-top: 10px;" type="submit">Search</button>
+											<a style="float:right; margin-top: 10px;" href="{% url 'shop:index-url' %}?-price=sort" class="button add_to_cart_button product_type_simple">Expensive</a>
+											<a style="float:right; margin-right: 15px; margin-top: 10px;	" href="{% url 'shop:index-url' %}?price=sort" class="button add_to_cart_button product_type_simple">Low</a>
 										</form>
 										<hr>
-										{% if products %}
-										<p class="woocommerce-result-count">
-											Showing 1&ndash;10 of 14 results</p>
-										<form class="woocommerce-ordering" method="get">
-											<select name="orderby" class="orderby">
-												<option value="menu_order"  selected='selected'>Default sorting</option>
-												<option value="popularity" >Sort by popularity</option>
-												<option value="rating" >Sort by average rating</option>
-												<option value="date" >Sort by newness</option>
-												<option value="price" >Sort by price: low to high</option>
-												<option value="price-desc" >Sort by price: high to low</option>
-											</select>
-											<input type="hidden" name="post_type" value="product" />
-										</form>
-										{% endif %}
 										{% block content %}
 
 										{% endblock %}

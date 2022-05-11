@@ -1,13 +1,12 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from .models import Category, Product, Comment
-from .utils import DeleteObjectMixin, GetAllMixin, GetDetailMixin
+from .utils import DeleteObjectMixin, GetAllMixin, GetDetailMixin, get_product_or_category, RegisterOrLoginMixin
 from .forms import CommentForm, ProductForm, RegistrationForm, LoginForm
 from django.contrib.auth.views import LoginView
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import View, CreateView
 from django.contrib.auth import logout
-
 
 
 class Index(GetAllMixin, View):
@@ -36,12 +35,12 @@ class CreateProduct(View):
 
 class UpdateProduct(View):
     def get(self, request, product_slug):
-        product = Product.objects.get(slug=product_slug)
+        product = get_product_or_category(Product, product_slug)
         product_form = ProductForm(instance=product)
         return render(request, 'shop/update_product.html', {'form':product_form, 'product': product})
 
     def post(self, request, product_slug):
-        product = Product.objects.get(slug=product_slug)
+        product = get_product_or_category(Product, product_slug)
         product_form = ProductForm(request.POST, request.FILES, instance=product)
         if product_form.is_valid():
             update_product = product_form.save()
@@ -51,51 +50,37 @@ class UpdateProduct(View):
 
 class DeleteProduct(DeleteObjectMixin, View):
     model = Product
+    template_url = 'shop:index-url'
 
-class DeleteComment(View):
-    def get(self, request, comment_slug):
-        comment = get_object_or_404(Comment, slug=comment_slug)
-        comment.delete()
-        return redirect(comment.product.get_absolute_url())
+
+class DeleteComment(DeleteObjectMixin, View):
+    model = Comment
+
 
 class UpdateComment(View):
-    def get(self, request, comment_slug):
-        comment = get_object_or_404(Comment, slug=comment_slug)
+    def get(self, request, obj_id):
+        comment = get_object_or_404(Comment, id=obj_id)
         comment_form = CommentForm(instance=comment)
         return render(request, 'shop/update_comment.html', {'form':comment_form})
     
-    def post(self, request, comment_slug):
-        comment = get_object_or_404(Comment, slug=comment_slug)
+    def post(self, request, obj_id):
+        comment = get_object_or_404(Comment, id=obj_id)
         comment_form = CommentForm(request.POST, instance=comment)
         if comment_form.is_valid():
             comment_form.save()
             return redirect(comment.product.get_absolute_url())
 
-class Register(CreateView):
+
+class Register(RegisterOrLoginMixin, CreateView):
     form_class = RegistrationForm
     template_name = 'shop/register.html'
-    success_url = reverse_lazy('shop:index-url')
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['registration_form'] = self.get_form(self.get_form_class())
-        return context
-
-    def get_success_url(self):
-        return reverse_lazy('shop:index-url')
+    register_or_login_form = 'registration_form'
 
 
-class Login(LoginView):
+class Login(RegisterOrLoginMixin, LoginView):
     form_class = LoginForm
     template_name = 'shop/login.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['login_form'] = self.get_form(self.get_form_class())
-        return context
-
-    def get_success_url(self):
-        return reverse_lazy('shop:index-url')
+    register_or_login_form = 'login_form'
 
 
 def logout_user(request):
@@ -105,4 +90,3 @@ def logout_user(request):
 
 def profile(request):
     return render(request, 'shop/profile.html')
-

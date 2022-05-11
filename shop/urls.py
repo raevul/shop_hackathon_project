@@ -11,9 +11,10 @@ urlpatterns = [
     path('logout/', logout_user, name='logout-url'),
     path('profile/', profile, name='profile-url'),
     path('<slug:category_slug>/', Index.as_view(), name='category-url'),
+    path('<category_slug>/', Index.as_view(), name='products-ordering'),
     path('product/<slug:product_slug>/', DetailProduct.as_view(), name='detail-product-url'),
     path('product/update/<slug:product_slug>/', UpdateProduct.as_view(), name='update-product-url'),
-    path('product/delete/<slug:product_slug>/', DeleteProduct.as_view(), name='delete-product-url'),
-    path('comment/delete/<slug:comment_slug>/', DeleteComment.as_view(), name='delete-comment-url'),
-    path('comment/update/<slug:comment_slug>/', UpdateComment.as_view(), name='update-comment-url'),
+    path('product/delete/<int:obj_id>/', DeleteProduct.as_view(), name='delete-product-url'),
+    path('comment/delete/<int:obj_id>/', DeleteComment.as_view(), name='delete-comment-url'),
+    path('comment/update/<int:obj_id>/', UpdateComment.as_view(), name='update-comment-url'),
 ]
