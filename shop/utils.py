@@ -10,13 +10,14 @@ from .helpers import product_sort
 
 
 class GetAllMixin:
+    template = None
     def get(self, request, category_slug=None):
         category = None
         obj_prod = self.model_prod.objects.all()
         obj_cat = self.model_cat.objects.all()
 
         if category_slug:
-            category = get_product_or_category(obj_cat, category_slug)
+            category = get_object_or_404(obj_cat, slug=category_slug)
             obj_prod = category.products.filter(category=category)
         obj_prod = product_sort(request, obj_prod, category_slug)
         search = request.GET.get('search', '')
@@ -36,13 +37,13 @@ class GetAllMixin:
 
 
 class GetDetailMixin:
-    def get(self, request, product_slug):
-        product = get_product_or_category(self.model, product_slug)
+    def get(self, request, obj_id):
+        product = get_product_or_comment(self.model, obj_id)
         categories = Category.objects.all()
         return render(request, self.template, {'product':product, 'categories': categories})
 
-    def post(self, request, product_slug):
-        product = get_product_or_category(self.model, product_slug)
+    def post(self, request, obj_id):
+        product = get_product_or_comment(self.model, obj_id)
         if request.POST.get('comment'):
             comment = Comment(title=request.POST.get('comment'), product_id=product.id)
             comment.save()
@@ -53,7 +54,7 @@ class DeleteObjectMixin:
     model = None
     template_url = None
     def get(self, request, obj_id):
-        obj = get_object_or_404(self.model, id=obj_id)
+        obj = get_product_or_comment(self.model, obj_id)
         obj.delete()
         if self.template_url:
             return redirect(self.template_url)
@@ -69,6 +70,6 @@ class RegisterOrLoginMixin:
         return reverse_lazy('shop:index-url')
 
 
-def get_product_or_category(model, obj_slug):
-    obj = get_object_or_404(model, slug=obj_slug)
+def get_product_or_comment(model, obj_id):
+    obj = get_object_or_404(model, id=obj_id)
     return obj

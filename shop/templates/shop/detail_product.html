@@ -2,17 +2,6 @@
 {% load static %}
 {% block title %}{{product.name}}{% endblock %}
 
-{% block search %}
-    <form class="d-flex">
-        <input class="form-control me-2" type="search" name="search" placeholder="Search" aria-label="Search">
-        <button class="button add_to_cart_button product_type_simple" style="margin-top: 10px;" type="submit">Search</button>
-        <a style="float:right; margin-top: 10px;" href="{% url 'shop:index-url' %}?-price=sort" class="button add_to_cart_button product_type_simple">Expensive</a>
-        <a style="float:right; margin-right: 15px; margin-top: 10px;	" href="{% url 'shop:index-url' %}?price=sort" class="button add_to_cart_button product_type_simple">Low</a>
-    </form>
-    <hr>
-{% endblock %}
-
-
 {% block content %}
 
 <article class="post_content">
@@ -36,10 +25,11 @@
           </ins>
         </p>
       </div>
-      <a href="{% url 'shop:update-product-url' product.slug %}" class="single_add_to_cart_button button alt">Update</a>
+        {% if request.user.is_authenticated %}
+      <a href="{% url 'shop:update-product-url' product.id %}" class="single_add_to_cart_button button alt">Update</a>
       <a href="{% url 'shop:delete-product-url' product.id %}" class="single_add_to_cart_button button alt">Delete</a>
 
-      <form action="{% url 'cart:cart-add' product.slug %}" class="cart" method="post" enctype='multipart/form-data'>
+      <form action="{% url 'cart:cart-add' product.id %}" class="cart" method="post" enctype='multipart/form-data'>
         {% csrf_token %}
         <div class="quantity">
           <input type="number" step="1" min="1"  name="quantity" value="1" title="Qty" class="input-text qty text" size="4" />
@@ -47,6 +37,7 @@
         <input type="hidden" name="add-to-cart" value="4015" />
         <button type="submit" class="single_add_to_cart_button button alt">Add to cart</button>
       </form>
+        {% endif %}
       <div class="product_meta">
         <span class="posted_in">
           Categories: 
@@ -83,8 +74,10 @@
               <h5 class="card-header">User</h5>
               <div class="card-body">
                 <p class="card-text">{{comment.title}}</p>
+                  {% if request.user.is_authenticated %}
                   <a href="{% url 'shop:update-comment-url' comment.id %}" class="btn btn-primary">Edit</a>
                   <a href="{% url 'shop:delete-comment-url' comment.id %}" class="btn btn-primary">Delete</a>
+                  {% endif %}
               </div>
               <h6 class="card-header" style="color: grey;">{{comment.created_at}}</h6>
           
@@ -96,6 +89,7 @@
 
 
           </div>
+            {% if request.user.is_authenticated %}
           <div id="review_form_wrapper">
             <div id="review_form">
               <div id="respond" class="comment-respond">
@@ -111,7 +105,7 @@
               </div>
             </div>
           </div>
-          <div class="clear"></div>
+            {% endif %}
         </div>
       </div>
     </div>

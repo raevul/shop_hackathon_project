@@ -7,9 +7,9 @@ from .forms import CartAddProductForm
 
 
 @require_http_methods(['POST'])
-def cart_add(request, product_slug):
+def cart_add(request, obj_id):
     cart = Cart(request)
-    product = get_object_or_404(Product, slug=product_slug)
+    product = get_object_or_404(Product, id=obj_id)
     form = CartAddProductForm(request.POST)
     if form.is_valid():
         cleaned_data = form.cleaned_data
@@ -21,13 +21,13 @@ def cart_add(request, product_slug):
     return redirect('cart:cart-detail')
 
 
-def cart_remove(request, product_slug):
+def cart_remove(request, obj_id):
     cart = Cart(request)
-    product = get_object_or_404(Product, slug=product_slug)
+    product = get_object_or_404(Product, id=obj_id)
     cart.remove(product)
     return redirect('cart:cart-detail')
 
 
 def cart_detail(request):
     cart = Cart(request)
-    return render(request, 'cart_detail.html', {'cart': cart})
+    return render(request, 'cart_detail.html', {})

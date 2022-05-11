@@ -23,9 +23,9 @@
                                 <img style="height: 70px; margin-top: 20px; margin-bottom: 20px;" src="{{ product.image.url }}">
                             </a>
                         </td>
-                        <td>{{ product.name }}</td>
+                        <td>{{ item.name }}</td>
                         <td>{{ item.quantity }}</td>
-                        <td><a href="{% url 'cart:cart-remove' product.slug %}">Remove</a></td>
+                        <td><a href="{% url 'cart:cart-remove' product.id %}">Remove</a></td>
                         <td class="num">{{ item.price }} сом</td>
                         <td class="num">{{ item.total_price }} сом</td>
                     </tr>

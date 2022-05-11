@@ -12,32 +12,32 @@ class Cart:
         self.cart = cart
 
     def add_or_update(self, product, quantity=1, update_quantity=False):
-        product_slug = product.slug
-        if product_slug not in self.cart:
-            self.cart[product_slug] = {
+        product_id = product.id
+        if product_id not in self.cart:
+            self.cart[product_id] = {
                 'quantity': 0,
                 'price': str(product.price)
             }
         if update_quantity:
-            self.cart[product_slug]['quantity'] = quantity
+            self.cart[product_id]['quantity'] = quantity
         else:
-            self.cart[product_slug]['quantity'] += int(quantity)
+            self.cart[product_id]['quantity'] += int(quantity)
         self.save()
 
     def save(self):
         self.session.modified = True
 
     def remove(self, product):
-        product_slug = product.slug
-        if product_slug in self.cart:
-            del self.cart[product_slug]
+        product_id = str(product.id)
+        if product_id in self.cart:
+            del self.cart[product_id]
             self.save()
 
     def __iter__(self):
-        product_slugs = self.cart.keys()
-        products = Product.objects.filter(slug__in=product_slugs)
+        product_ids = self.cart.keys()
+        products = Product.objects.filter(id__in=product_ids)
         for product in products:
-            self.cart[product.slug]['product'] = product
+            self.cart[str(product.id)]['product'] = product
 
         for item in self.cart.values():
             item['price'] = Decimal(item['price'])

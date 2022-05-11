@@ -4,7 +4,6 @@ from django.urls import reverse
 
 class Product(models.Model):
     name = models.CharField(max_length=100)
-    slug = models.SlugField(max_length=100, unique=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     image = models.ImageField(upload_to='products/%y/%m/%d', blank=True)
     description = models.TextField(blank=True)
@@ -22,11 +21,7 @@ class Product(models.Model):
         verbose_name_plural = 'Products'
 
     def get_absolute_url(self):
-        return reverse('shop:detail-product-url', kwargs={'product_slug': self.slug})
-
-    def save(self):
-        self.slug = self.name.lower().replace(' ', '-')
-        return super().save()
+        return reverse('shop:detail-product-url', kwargs={'obj_id': self.id})
 
 
 class Category(models.Model):
