@@ -73,6 +73,10 @@ class Register(RegisterOrLoginMixin, CreateView):
     form_class = RegistrationForm
     template_name = 'shop/register.html'
     register_or_login_form = 'registration_form'
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        return redirect('shop:index-url')
 
 
 class Login(RegisterOrLoginMixin, LoginView):
