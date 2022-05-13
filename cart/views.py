@@ -29,5 +29,4 @@ def cart_remove(request, obj_id):
 
 
 def cart_detail(request):
-    cart = Cart(request)
     return render(request, 'cart_detail.html', {})
