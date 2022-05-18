@@ -4,7 +4,7 @@ from .utils import DeleteObjectMixin, GetAllMixin, GetDetailMixin, get_product_o
 from .forms import CommentForm, ProductForm, RegistrationForm, LoginForm
 from django.contrib.auth.views import LoginView
 from django.views.generic import View, CreateView
-from django.contrib.auth import logout
+from django.contrib.auth import logout, login
 
 
 class Index(GetAllMixin, View):
@@ -73,6 +73,11 @@ class Register(RegisterOrLoginMixin, CreateView):
     form_class = RegistrationForm
     template_name = 'shop/register.html'
     register_or_login_form = 'registration_form'
+
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        return redirect('shop:index-url')
 
 
 class Login(RegisterOrLoginMixin, LoginView):
