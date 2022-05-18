@@ -1,8 +1,6 @@
 from django.contrib.auth import login
 from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse, reverse_lazy
-
-from cart.helpers import Cart
 from .models import Category, Comment
 from django.conf import settings
 from django.core.paginator import Paginator
