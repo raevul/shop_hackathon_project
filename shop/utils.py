@@ -1,4 +1,3 @@
-from django.contrib.auth import login
 from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse, reverse_lazy
 from .models import Category, Comment
@@ -12,6 +11,7 @@ from .helpers import product_sort
 
 class GetAllMixin:
     template = None
+
     def get(self, request, category_slug=None):
         category = None
         obj_prod = self.model_prod.objects.all()
@@ -54,6 +54,7 @@ class GetDetailMixin:
 class DeleteObjectMixin:
     model = None
     template_url = None
+
     def get(self, request, obj_id):
         obj = get_product_or_comment(self.model, obj_id)
         Cart(request).remove(obj)

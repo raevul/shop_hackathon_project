@@ -1,10 +1,11 @@
 from django.shortcuts import get_object_or_404, redirect, render
-from .models import Category, Product, Comment
-from .utils import DeleteObjectMixin, GetAllMixin, GetDetailMixin, get_product_or_comment, RegisterOrLoginMixin
-from .forms import CommentForm, ProductForm, RegistrationForm, LoginForm
 from django.contrib.auth.views import LoginView
 from django.views.generic import View, CreateView
 from django.contrib.auth import logout, login
+
+from .models import Category, Product, Comment
+from .utils import DeleteObjectMixin, GetAllMixin, GetDetailMixin, get_product_or_comment, RegisterOrLoginMixin
+from .forms import CommentForm, ProductForm, RegistrationForm, LoginForm
 
 
 class Index(GetAllMixin, View):

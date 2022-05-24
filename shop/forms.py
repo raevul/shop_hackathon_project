@@ -2,8 +2,8 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.forms import ModelForm
-from .models import Product, Comment
 
+from .models import Product, Comment
 
 
 class ProductForm(ModelForm):
@@ -11,10 +11,12 @@ class ProductForm(ModelForm):
         model = Product
         fields = ['category', 'name', 'price', 'image', 'description', 'stock']
 
+
 class CommentForm(ModelForm):
     class Meta:
         model = Comment
-        fields = ['title',]
+        fields = ['title', ]
+
 
 class RegistrationForm(UserCreationForm):
     username = forms.CharField(label='Username', widget=forms.TextInput(attrs={'class': 'form-input'}))

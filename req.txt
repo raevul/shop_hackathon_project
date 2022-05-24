@@ -1,4 +1,0 @@
-django
-Pillow
-psycopg2-binary
-python-decouple
